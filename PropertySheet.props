@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <TINYXML2>D:\Workspace\tinyxml-2.6.2</TINYXML2>
+    <WEBP>D:\Workspace\libwebp-1.2.1</WEBP>
+    <JPEGLIB>D:\Workspace\jpeg-9d</JPEGLIB>
+    <PNGLIB>D:\Workspace\libpng-1.6.37</PNGLIB>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PublicIncludeDirectories>$(WEBP)\include;$(JPEGLIB);$(PNGLIB);$(WEBP)\src;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <LibraryPath>$(JPEGLIB)\Release\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="TINYXML2">
+      <Value>$(TINYXML2)</Value>
+    </BuildMacro>
+    <BuildMacro Include="WEBP">
+      <Value>$(WEBP)</Value>
+    </BuildMacro>
+    <BuildMacro Include="JPEGLIB">
+      <Value>$(JPEGLIB)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="PNGLIB">
+      <Value>$(PNGLIB)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
