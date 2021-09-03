@@ -9,6 +9,6 @@
 ## Links
 Thanks for following SDKs.<br/>
 * [Google WebP Home Page] (https://developers.google.com/speed/webp?hl=ja)
-* [libpng Home Page] (http://www.libpng.org/pub/png/libpng.html)
+* [libPNG Home Page] (http://www.libpng.org/pub/png/libpng.html)
 * [TinyXML Home Page] (http://www.grinninglizard.com/tinyxml/)
-* [libjpeg Home Page] (http://libjpeg.sourceforge.net/)
+* [libJpeg Home Page] (http://libjpeg.sourceforge.net/)
