@@ -1,4 +1,3 @@
 # WebpDropConverter
 
-<img src="/screenshots/Captured.jpg" width="644px">
-![Test Image 3](/screenshots/Captured.jpg)
+<img src="https://github.com/aymspecial/WebpDropConverter/blob/master/screenshots/Captured.jpg" width="644px">
