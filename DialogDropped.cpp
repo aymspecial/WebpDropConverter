@@ -31,7 +31,6 @@ void DialogDropped::DoDataExchange( CDataExchange* pDX )
 
 BEGIN_MESSAGE_MAP( DialogDropped, CDialogEx )
 	ON_WM_DROPFILES()
-//	ON_WM_CREATE()
 	ON_BN_CLICKED( IDC_CONVERTSTOP, &DialogDropped::OnBnClickedStopconvert )
 END_MESSAGE_MAP()
 
