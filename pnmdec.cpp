@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // (limited) PNM decoder
-
+#include "pch.h"
 #include "./pnmdec.h"
 
 #include <assert.h>

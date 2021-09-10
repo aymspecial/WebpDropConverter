@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // TIFF decode.
-
+#include "pch.h"
 #include "./tiffdec.h"
 
 #ifdef HAVE_CONFIG_H

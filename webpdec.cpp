@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // WebP decode.
-
+#include "pch.h"
 #ifdef HAVE_CONFIG_H
 #include "webp/config.h"
 #endif

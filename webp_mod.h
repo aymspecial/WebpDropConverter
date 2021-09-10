@@ -13,10 +13,10 @@ int dwebp_main( int argc, char* argv[] );
 #define WEBP_HAVE_JPEG
 
 #include "example_util.h"
-#include "imageio/image_dec.h"
-#include "imageio/image_enc.h"
-#include "imageio/imageio_util.h"
-#include "imageio/webpdec.h"
+#include "image_dec.h"
+#include "image_enc.h"
+#include "imageio_util.h"
+#include "webpdec.h"
 #include "stopwatch.h"
 #include "unicode.h"
 #include "webp/encode.h"

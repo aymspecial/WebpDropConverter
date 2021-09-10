@@ -6,10 +6,13 @@
     <WEBP>D:\Workspace\libwebp-1.2.1</WEBP>
     <JPEGLIB>D:\Workspace\jpeg-9d</JPEGLIB>
     <PNGLIB>D:\Workspace\libpng-1.6.37</PNGLIB>
+    <ZLIB>D:\Workspace\zlib-1.2.11</ZLIB>
   </PropertyGroup>
   <PropertyGroup>
-    <PublicIncludeDirectories>$(WEBP)\include;$(JPEGLIB);$(PNGLIB);$(WEBP)\src;$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <LibraryPath>$(JPEGLIB)\Release\x64;$(LibraryPath)</LibraryPath>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <LibraryPath>$(ZLIB)\Release;$(PNGLIB)\Release;$(JPEGLIB)\Release\x64;$(WEBP)\Release;$(TINYXML2)\x64\Release;$(LibraryPath)</LibraryPath>
+    <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
+    <IncludePath>$(WEBP)\include;$(JPEGLIB);$(WEBP)\src;$(TINYXML2);$(PNGLIB);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup>
@@ -25,6 +28,10 @@
     </BuildMacro>
     <BuildMacro Include="PNGLIB">
       <Value>$(PNGLIB)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="ZLIB">
+      <Value>$(ZLIB)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>

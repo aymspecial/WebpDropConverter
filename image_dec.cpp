@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // Generic image-type guessing.
-
+#include "pch.h"
 #include "./image_dec.h"
 
 static WEBP_INLINE uint32_t GetBE32(const uint8_t buf[]) {

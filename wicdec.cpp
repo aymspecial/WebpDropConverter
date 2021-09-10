@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // Windows Imaging Component (WIC) decode.
-
+#include "pch.h"
 #include "./wicdec.h"
 
 #ifdef HAVE_CONFIG_H

@@ -9,7 +9,7 @@
 //
 //  Metadata types and functions.
 //
-
+#include "pch.h"
 #include "./metadata.h"
 
 #include <stdlib.h>

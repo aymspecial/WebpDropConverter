@@ -25,6 +25,7 @@ public:
 	RECT OrigRect;
 
 	PropertyParameter GetEncodeParameter();
+	void FlushParameter();
 
 	// ダイアログ データ
 #ifdef AFX_DESIGN_TIME
@@ -51,7 +52,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedOK();
 	afx_msg void OnPaint();
 	afx_msg void OnReleasedWebpQualitySlider( NMHDR* pNMHDR, LRESULT* pResult );
 	afx_msg void OnReleasedJpegqualityslider( NMHDR* pNMHDR, LRESULT* pResult );

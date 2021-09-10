@@ -43,4 +43,6 @@ public:
 	CTabCtrl tab;
 	DialogDropped DroppedDlg;
 	DialogProperty PropertyDlg;
+	afx_msg void OnMove( int x, int y );
+	afx_msg void OnClose();
 };

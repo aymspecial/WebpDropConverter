@@ -33,31 +33,28 @@
     <ClInclude Include="pch.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="DialogDropped.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="DialogProperty.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="XmlIni.h">
+    <ClInclude Include="example_util.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ConvertThread.h">
+    <ClInclude Include="stopwatch.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="webp_mod.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DialogDropped.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="imageio\image_dec.h">
+    <ClInclude Include="ConvertThread.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="imageio\metadata.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="imageio\webpdec.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="imageio\jpegdec.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="imageio\pngdec.h">
@@ -69,13 +66,22 @@
     <ClInclude Include="imageio\tiffdec.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="imageio\imageio_util.h">
+    <ClInclude Include="imageio\webpdec.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="imageio\wicdec.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="imageio\image_dec.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="imageio\image_enc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="stopwatch.h">
+    <ClInclude Include="imageio\imageio_util.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="imageio\jpegdec.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,46 +98,49 @@
     <ClCompile Include="DialogProperty.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="XmlIni.cpp">
+    <ClCompile Include="dwebp_mod.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="cwebp_mod.cpp">
+    <ClCompile Include="XmlIni.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ConvertThread.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="dwebp_mod.cpp">
+    <ClCompile Include="cwebp_mod.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DialogDropped.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\image_dec.c">
+    <ClCompile Include="jpegdec.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\metadata.c">
+    <ClCompile Include="imageio_util.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\webpdec.c">
+    <ClCompile Include="metadata.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\pngdec.c">
+    <ClCompile Include="pngdec.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\tiffdec.c">
+    <ClCompile Include="pnmdec.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\pnmdec.c">
+    <ClCompile Include="tiffdec.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\imageio_util.c">
+    <ClCompile Include="webpdec.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\image_enc.c">
+    <ClCompile Include="wicdec.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="imageio\jpegdec.cpp">
+    <ClCompile Include="image_dec.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="image_enc.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -144,7 +153,6 @@
     <None Include="res\WebpDropConverter.rc2">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="PropertySheet.props" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\WebpDropConverter.ico">

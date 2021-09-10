@@ -30,6 +30,11 @@ DialogProperty::GetEncodeParameter()
 	return propParam;
 }
 
+void DialogProperty::FlushParameter()
+{
+	writeIniParamEnc();
+}
+
 void DialogProperty::DoDataExchange( CDataExchange* pDX )
 {
 	CDialogEx::DoDataExchange( pDX );
@@ -45,7 +50,6 @@ void DialogProperty::DoDataExchange( CDataExchange* pDX )
 #pragma endregion
 
 BEGIN_MESSAGE_MAP( DialogProperty, CDialogEx )
-	ON_BN_CLICKED( IDC_OK, &DialogProperty::OnBnClickedOK )
 	ON_WM_PAINT()
 	ON_NOTIFY( NM_RELEASEDCAPTURE, IDC_WEBPQUALITYSLIDER, &DialogProperty::OnReleasedWebpQualitySlider )
 	ON_NOTIFY( NM_RELEASEDCAPTURE, IDC_JPEGQUALITYSLIDER, &DialogProperty::OnReleasedJpegqualityslider )
@@ -56,12 +60,6 @@ DialogProperty::OnPaint()
 {
 	CPaintDC dc( this ); // device context for painting
 						 // 描画メッセージで CDialogEx::OnPaint() を呼び出さないでください。
-}
-
-// OK ボタンが押された
-void DialogProperty::OnBnClickedOK()
-{
-	writeIniParamEnc();
 }
 
 BOOL
@@ -169,7 +167,8 @@ DialogProperty::OnReleasedWebpQualitySlider( NMHDR* pNMHDR, LRESULT* pResult )
 }
 
 
-void DialogProperty::OnReleasedJpegqualityslider( NMHDR* pNMHDR, LRESULT* pResult )
+void
+DialogProperty::OnReleasedJpegqualityslider( NMHDR* pNMHDR, LRESULT* pResult )
 {
 	auto iPos = jpegQualitySlider.GetPos();
 	wchar_t sValue[ 16 ];

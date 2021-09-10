@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // PNG decode.
-
+#include "pch.h"
 #include "./pngdec.h"
 
 #ifdef HAVE_CONFIG_H

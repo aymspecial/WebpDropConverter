@@ -9,7 +9,7 @@
 //
 //  Utility functions used by the image decoders.
 //
-
+#include "pch.h"
 #include "./imageio_util.h"
 
 #if defined(_WIN32)

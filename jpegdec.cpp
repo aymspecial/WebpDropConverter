@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // JPEG decode.
-
+#include "pch.h"
 #include "jpegdec.h"
 
 #ifdef HAVE_CONFIG_H

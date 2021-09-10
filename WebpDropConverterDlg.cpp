@@ -58,6 +58,9 @@ CWebpDropConverterDlg::CWebpDropConverterDlg( CWnd* pParent /*=nullptr*/ )
 	: CDialogEx( IDD_WEBPDROPCONVERTER_DIALOG, pParent )
 {
 	m_hIcon = AfxGetApp()->LoadIcon( IDR_MAINFRAME );
+
+	// IniFile
+	iniFile = new XmlIni( L"Application.xml" );
 }
 
 CWebpDropConverterDlg::~CWebpDropConverterDlg()
@@ -79,6 +82,8 @@ BEGIN_MESSAGE_MAP( CWebpDropConverterDlg, CDialogEx )
 	ON_MESSAGE( (UINT)MessageType::MM_PROGRESS, OnGetProgressMessage )
 	ON_MESSAGE( (UINT)MessageType::MM_STRING, OnGetStringMessage )
 	ON_WM_DROPFILES()
+	ON_WM_MOVE()
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 // CWebpDropConverterDlg メッセージ ハンドラー
@@ -114,9 +119,6 @@ CWebpDropConverterDlg::OnInitDialog()
 	SetIcon( m_hIcon, TRUE );		// 大きいアイコンの設定
 	SetIcon( m_hIcon, FALSE );		// 小さいアイコンの設定
 
-	// IniFile
-	iniFile = new XmlIni( L"Application.xml" );
-
 	// タブコントロールを追加
 	tab.InsertItem( 0, _T( "  Drop" ) );
 	tab.InsertItem( 1, _T( "  Settings" ) );
@@ -151,7 +153,12 @@ CWebpDropConverterDlg::OnInitDialog()
 	RECT dlgRect = DroppedDlg.OrigRect;
 	auto width = dlgRect.right - dlgRect.left + 10;
 	auto height = dlgRect.bottom - dlgRect.top + 20;
-	this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
+
+	auto x = iniFile->GetIniInt( "WindowRegion", "x", 100 );
+	auto y = iniFile->GetIniInt( "WindowRegion", "y", 100 );
+
+	this->SetWindowPos( NULL, x, y, width, height, SWP_NOZORDER );
+
 
 	return TRUE;
 }
@@ -206,6 +213,8 @@ HCURSOR CWebpDropConverterDlg::OnQueryDragIcon()
 
 void CWebpDropConverterDlg::OnTcnSelchangeTab1( NMHDR* pNMHDR, LRESULT* pResult )
 {
+	PropertyDlg.FlushParameter();
+
 	if( tab.GetCurSel() == 0 )
 	{
 		DroppedDlg.ShowWindow( SW_SHOW );
@@ -229,6 +238,7 @@ void CWebpDropConverterDlg::OnTcnSelchangeTab1( NMHDR* pNMHDR, LRESULT* pResult 
 		auto height = dlgRect.bottom - dlgRect.top + 70;
 		this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
 		DragAcceptFiles( 0 );  // プロパティシートで Drag を受け付けないので苦肉の策
+		// Drop のダイアログは不要とも言える（泣
 	}
 
 	*pResult = 0;
@@ -301,4 +311,26 @@ CWebpDropConverterDlg::OnDropFiles( HDROP hDropInfo )
 	DroppedDlg.ConvertWorker = worker;
 
 	CDialogEx::OnDropFiles( hDropInfo );
+}
+
+
+void CWebpDropConverterDlg::OnMove( int x, int y )
+{
+	CDialogEx::OnMove( x, y );
+
+	if( ! IsWindowVisible() )  // 初期化の時にデタラメな数値で呼ばれる
+		return;
+
+	iniFile->WriteIniInt( "WindowRegion", "x", x );
+	iniFile->WriteIniInt( "WindowRegion", "y", y );
+	iniFile->WriteFlush();
+}
+
+
+void CWebpDropConverterDlg::OnClose()
+{
+	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
+	PropertyDlg.FlushParameter();
+
+	CDialogEx::OnClose();
 }

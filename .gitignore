@@ -219,6 +219,10 @@ data/models/cerberus/*.*
 *.args.json
 
 # Ignore VS project files
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
 libbase.a
 

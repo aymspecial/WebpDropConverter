@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 //
 // Save image
-
+#include "pch.h"
 #include "./image_enc.h"
 
 #include <assert.h>
@@ -17,6 +17,8 @@
 #define WEBP_HAVE_PNG
 #ifdef WEBP_HAVE_PNG
 #include <png.h>
+#pragma comment(lib, "libpng16_static.lib")
+#pragma comment(lib, "zlibstatic.lib")
 #include <setjmp.h>   // note: this must be included *after* png.h
 #endif
 
