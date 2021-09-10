@@ -7,7 +7,7 @@
 
 ## How To Use
 1. Download from latest version. https://github.com/aymspecial/WebpDropConverter/releases
-2. Copy WebpDropConverter.exe to anywhere you like.
+2. Copy (or move) WebpDropConverter.exe to anywhere you like.
 3. Double Click!!
 
 ## Links
