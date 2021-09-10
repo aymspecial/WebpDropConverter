@@ -6,7 +6,9 @@
 2. Using C++(MFC), std::thread, mutex and messaging, I tried to make substantial project of multithread.
 
 ## How To Use
-Download from latest version. https://github.com/aymspecial/WebpDropConverter/releases
+1. Download from latest version. https://github.com/aymspecial/WebpDropConverter/releases
+2. Copy WebpDropConverter.exe to anywhere.
+3. Double Click!!
 
 ## Links
 Thanks for following SDKs.<br/>
