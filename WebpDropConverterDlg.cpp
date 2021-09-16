@@ -258,9 +258,7 @@ CWebpDropConverterDlg::OnGetProgressMessage( WPARAM wParam, LPARAM lParam )
 
 	if( lParam == -1 )  // 終了時はスレッドから -1 が渡ってくる
 	{
-		DroppedDlg.ProgBar.EnableWindow( FALSE );
-		DroppedDlg.ButtonProgressStop.EnableWindow( FALSE );
-		DroppedDlg.ThreadLabel.SetWindowTextW( L"Drop Image File( s ) Here." );
+		DroppedDlg.WorkingControls( false );
 
 		th->join();
 		delete worker;
@@ -306,8 +304,7 @@ CWebpDropConverterDlg::OnDropFiles( HDROP hDropInfo )
 	worker = new ConvertThread( this, WM_USER_THREAD, droppedFiles, propParam );
 	th = new std::thread( std::ref( *worker ) );
 
-	DroppedDlg.ProgBar.EnableWindow( TRUE );
-	DroppedDlg.ButtonProgressStop.EnableWindow( TRUE );
+	DroppedDlg.WorkingControls( true );
 	DroppedDlg.ConvertWorker = worker;
 
 	CDialogEx::OnDropFiles( hDropInfo );
@@ -318,7 +315,7 @@ void CWebpDropConverterDlg::OnMove( int x, int y )
 {
 	CDialogEx::OnMove( x, y );
 
-	if( ! IsWindowVisible() )  // 初期化の時にデタラメな数値で呼ばれる
+	if( ! IsWindowVisible() )  // 初期化の時は x, y がデタラメな数値で呼ばれる
 		return;
 
 	iniFile->WriteIniInt( "WindowRegion", "x", x );

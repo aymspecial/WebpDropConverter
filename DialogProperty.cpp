@@ -52,15 +52,8 @@ void DialogProperty::DoDataExchange( CDataExchange* pDX )
 BEGIN_MESSAGE_MAP( DialogProperty, CDialogEx )
 	ON_WM_PAINT()
 	ON_NOTIFY( NM_RELEASEDCAPTURE, IDC_WEBPQUALITYSLIDER, &DialogProperty::OnReleasedWebpQualitySlider )
-	ON_NOTIFY( NM_RELEASEDCAPTURE, IDC_JPEGQUALITYSLIDER, &DialogProperty::OnReleasedJpegqualityslider )
+	ON_NOTIFY( NM_RELEASEDCAPTURE, IDC_JPEGQUALITYSLIDER, &DialogProperty::OnReleasedJpegqualitySlider )
 END_MESSAGE_MAP()
-
-void
-DialogProperty::OnPaint()
-{
-	CPaintDC dc( this ); // device context for painting
-						 // 描画メッセージで CDialogEx::OnPaint() を呼び出さないでください。
-}
 
 BOOL
 DialogProperty::OnInitDialog()
@@ -151,7 +144,7 @@ void DialogProperty::writeIniParamEnc()
 
 /// <summary>
 /// Quality Slider を離したときのコールバック
-/// unresolved:何故か動かしてるときのコールバックが拾えない
+/// unresolved:何故か動かしてるときのイベントが拾えない
 /// </summary>
 /// <param name="pNMHDR"></param>
 /// <param name="pResult"></param>
@@ -168,7 +161,7 @@ DialogProperty::OnReleasedWebpQualitySlider( NMHDR* pNMHDR, LRESULT* pResult )
 
 
 void
-DialogProperty::OnReleasedJpegqualityslider( NMHDR* pNMHDR, LRESULT* pResult )
+DialogProperty::OnReleasedJpegqualitySlider( NMHDR* pNMHDR, LRESULT* pResult )
 {
 	auto iPos = jpegQualitySlider.GetPos();
 	wchar_t sValue[ 16 ];

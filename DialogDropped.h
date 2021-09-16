@@ -14,6 +14,8 @@ public:
 	RECT OrigRect;
 	ConvertThread* ConvertWorker;
 
+	void WorkingControls( bool bWorking );
+
 	// ダイアログ データ
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_PROP_Dropped };
@@ -28,6 +30,6 @@ public:
 	CMFCButton ButtonProgressStop;
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDropFiles( HDROP hDropInfo );
-	afx_msg void OnBnClickedStopconvert();
+	afx_msg void OnBnClickedStopConvert();
 	CStatic ThreadLabel;
 };

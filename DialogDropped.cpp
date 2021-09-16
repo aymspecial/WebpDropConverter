@@ -31,7 +31,7 @@ void DialogDropped::DoDataExchange( CDataExchange* pDX )
 
 BEGIN_MESSAGE_MAP( DialogDropped, CDialogEx )
 	ON_WM_DROPFILES()
-	ON_BN_CLICKED( IDC_CONVERTSTOP, &DialogDropped::OnBnClickedStopconvert )
+	ON_BN_CLICKED( IDC_CONVERTSTOP, &DialogDropped::OnBnClickedStopConvert )
 END_MESSAGE_MAP()
 
 // DialogDropped メッセージ ハンドラー
@@ -53,10 +53,26 @@ void DialogDropped::OnDropFiles( HDROP hDropInfo )
 	CDialogEx::OnDropFiles( hDropInfo );
 }
 
-void DialogDropped::OnBnClickedStopconvert()
+void DialogDropped::OnBnClickedStopConvert()
 {
 	MyMessage mess;
 	mess.Type = MessageType::MM_QUIT;
 
 	ConvertWorker->PushMessage( mess );
+}
+
+void
+DialogDropped::WorkingControls( bool bWorking )
+{
+	if( bWorking )
+	{
+		ProgBar.EnableWindow( TRUE );
+		ButtonProgressStop.EnableWindow( TRUE );
+	}
+	else
+	{
+		ProgBar.EnableWindow( FALSE );
+		ButtonProgressStop.EnableWindow( FALSE );
+		ThreadLabel.SetWindowTextW( L"Drop Image File( s ) Here." );
+	}
 }
