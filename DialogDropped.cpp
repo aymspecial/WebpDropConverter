@@ -62,7 +62,7 @@ void DialogDropped::OnBnClickedStopConvert()
 }
 
 void
-DialogDropped::WorkingControls( bool bWorking )
+DialogDropped::EnableControls( bool bWorking )
 {
 	if( bWorking )
 	{

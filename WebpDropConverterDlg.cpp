@@ -258,7 +258,7 @@ CWebpDropConverterDlg::OnGetProgressMessage( WPARAM wParam, LPARAM lParam )
 
 	if( lParam == -1 )  // 終了時はスレッドから -1 が渡ってくる
 	{
-		DroppedDlg.WorkingControls( false );
+		DroppedDlg.EnableControls( false );
 
 		th->join();
 		delete worker;
@@ -304,7 +304,7 @@ CWebpDropConverterDlg::OnDropFiles( HDROP hDropInfo )
 	worker = new ConvertThread( this, WM_USER_THREAD, droppedFiles, propParam );
 	th = new std::thread( std::ref( *worker ) );
 
-	DroppedDlg.WorkingControls( true );
+	DroppedDlg.EnableControls( true );
 	DroppedDlg.ConvertWorker = worker;
 
 	CDialogEx::OnDropFiles( hDropInfo );

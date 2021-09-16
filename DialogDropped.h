@@ -14,7 +14,7 @@ public:
 	RECT OrigRect;
 	ConvertThread* ConvertWorker;
 
-	void WorkingControls( bool bWorking );
+	void EnableControls( bool bWorking );
 
 	// ダイアログ データ
 #ifdef AFX_DESIGN_TIME

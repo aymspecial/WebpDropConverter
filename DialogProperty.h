@@ -26,7 +26,7 @@ public:
 
 	PropertyParameter GetEncodeParameter();
 	void FlushParameter();
-	void WorkingControls( bool bWorking );
+	void EnableControls( bool bWorking );
 
 	// ダイアログ データ
 #ifdef AFX_DESIGN_TIME
