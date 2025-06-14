@@ -3,8 +3,9 @@
 
 #include "pch.h"
 #include "framework.h"
-
-#include "DialogProperty.h"
+#include "PropertyParameter.h"
+#include "DialogFmtWebp.h"
+#include "DialogFmtOther.h"
 #include "ConvertThread.h"
 #include "DialogDropped.h"
 
@@ -54,18 +55,22 @@ END_MESSAGE_MAP()
 #pragma endregion
 
 // CWebpDropConverterDlg ダイアログ
-CWebpDropConverterDlg::CWebpDropConverterDlg( CWnd* pParent /*=nullptr*/ )
+CWebpDropConverterDlg::CWebpDropConverterDlg( CWnd* pParent )
 	: CDialogEx( IDD_WEBPDROPCONVERTER_DIALOG, pParent )
 {
 	m_hIcon = AfxGetApp()->LoadIcon( IDR_MAINFRAME );
 
 	// IniFile
-	iniFile = new XmlIni( L"Application.xml" );
+	appIni = new XmlIni( L"Application.xml" );
+	pEncParam = new PropertyParameter();
+	FmtWebpDlg.pEncParam = pEncParam;
+	FmtOthrDlg.pEncParam = pEncParam;
 }
 
 CWebpDropConverterDlg::~CWebpDropConverterDlg()
 {
-	delete iniFile;
+	delete pEncParam;
+	delete appIni;
 }
 
 void CWebpDropConverterDlg::DoDataExchange( CDataExchange* pDX )
@@ -121,13 +126,16 @@ CWebpDropConverterDlg::OnInitDialog()
 
 	// タブコントロールを追加
 	tab.InsertItem( 0, _T( "  Drop" ) );
-	tab.InsertItem( 1, _T( "  Settings" ) );
+	tab.InsertItem( 1, _T( "  DropWebp" ) );
+	tab.InsertItem( 2, _T( "  DropOther" ) );
 
 	// タブのプロパティシート
-	PropertyDlg.Create( IDD_PROPERTY, &tab );
+	FmtWebpDlg.Create( IDD_FMTWEBP, &tab );
+	FmtOthrDlg.Create( IDD_FMTOTHER, &tab );
 	DroppedDlg.Create( IDD_PROP_Dropped, &tab );
 
-	PropertyDlg.GetWindowRect( &PropertyDlg.OrigRect );
+	FmtWebpDlg.GetWindowRect( &FmtWebpDlg.OrigRect );
+	FmtOthrDlg.GetWindowRect( &FmtOthrDlg.OrigRect );
 	DroppedDlg.GetWindowRect( &DroppedDlg.OrigRect );
 
 	// シートのズレを補正する
@@ -142,23 +150,24 @@ CWebpDropConverterDlg::OnInitDialog()
 	tab.AdjustRect( FALSE, rect );
 	tab.ScreenToClient( rect );
 
-	PropertyDlg.MoveWindow( rect );
+	FmtWebpDlg.MoveWindow( rect );
+	FmtOthrDlg.MoveWindow( rect );
 	DroppedDlg.MoveWindow( rect );
 
 	// タブ 0 をカレントにし、ダイアログ １ を表示する
 	tab.SetCurSel( 0 );
-	PropertyDlg.ShowWindow( SW_HIDE );
+	FmtWebpDlg.ShowWindow( SW_HIDE );
+	FmtOthrDlg.ShowWindow( SW_HIDE );
 	DroppedDlg.ShowWindow( SW_SHOW );
 
 	RECT dlgRect = DroppedDlg.OrigRect;
 	auto width = dlgRect.right - dlgRect.left + 10;
 	auto height = dlgRect.bottom - dlgRect.top + 20;
 
-	auto x = iniFile->GetIniInt( "WindowRegion", "x", 100 );
-	auto y = iniFile->GetIniInt( "WindowRegion", "y", 100 );
+	auto x = appIni->GetIniInt( "WindowRegion", "x", 100 );
+	auto y = appIni->GetIniInt( "WindowRegion", "y", 100 );
 
 	this->SetWindowPos( NULL, x, y, width, height, SWP_NOZORDER );
-
 
 	return TRUE;
 }
@@ -213,32 +222,56 @@ HCURSOR CWebpDropConverterDlg::OnQueryDragIcon()
 
 void CWebpDropConverterDlg::OnTcnSelchangeTab1( NMHDR* pNMHDR, LRESULT* pResult )
 {
-	PropertyDlg.FlushParameter();
+	FmtWebpDlg.FlushParameter();
+	FmtOthrDlg.FlushParameter();
 
-	if( tab.GetCurSel() == 0 )
+	switch( tab.GetCurSel() )
 	{
-		DroppedDlg.ShowWindow( SW_SHOW );
-		PropertyDlg.ShowWindow( SW_HIDE );
+		case 0:
+		{
+			DroppedDlg.ShowWindow( SW_SHOW );
+			FmtWebpDlg.ShowWindow( SW_HIDE );
+			FmtOthrDlg.ShowWindow( SW_HIDE );
 
-		RECT dlgRect;
-		dlgRect = DroppedDlg.OrigRect;
-		auto width = dlgRect.right - dlgRect.left + 10;
-		auto height = dlgRect.bottom - dlgRect.top + 20;
-		this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
-		DragAcceptFiles( 1 );
-	}
-	else
-	{
-		DroppedDlg.ShowWindow( SW_HIDE );
-		PropertyDlg.ShowWindow( SW_SHOW );
+			RECT dlgRect;
+			dlgRect = DroppedDlg.OrigRect;
+			auto width = dlgRect.right - dlgRect.left + 10;
+			auto height = dlgRect.bottom - dlgRect.top + 20;
+			this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
+			DragAcceptFiles( 1 );
+			break;
+		}
+		case 1:
+		{
+			DroppedDlg.ShowWindow( SW_HIDE );
+			FmtWebpDlg.ShowWindow( SW_SHOW );
+			FmtOthrDlg.ShowWindow( SW_HIDE );
 
-		RECT dlgRect;
-		dlgRect = PropertyDlg.OrigRect;
-		auto width = dlgRect.right - dlgRect.left + 10;
-		auto height = dlgRect.bottom - dlgRect.top + 70;
-		this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
-		DragAcceptFiles( 0 );  // プロパティシートで Drag を受け付けないので苦肉の策
-		// Drop のダイアログは不要とも言える（泣
+			RECT dlgRect;
+			dlgRect = FmtWebpDlg.OrigRect;
+			auto width = dlgRect.right - dlgRect.left + 10;
+			auto height = dlgRect.bottom - dlgRect.top + 70;
+			this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
+			DragAcceptFiles( FALSE );  // プロパティシートは Drag を受け付けないので苦肉の策
+			// Drop のダイアログは不要かも（泣
+			break;
+		}
+		case 2:
+		{
+			DroppedDlg.ShowWindow( SW_HIDE );
+			FmtWebpDlg.ShowWindow( SW_HIDE );
+			FmtOthrDlg.ShowWindow( SW_SHOW );
+
+			RECT dlgRect;
+			dlgRect = FmtOthrDlg.OrigRect;
+			auto width = dlgRect.right - dlgRect.left + 10;
+			auto height = dlgRect.bottom - dlgRect.top + 70;
+			this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
+			DragAcceptFiles( FALSE );
+			break;
+		}
+		default:
+			;
 	}
 
 	*pResult = 0;
@@ -297,11 +330,10 @@ CWebpDropConverterDlg::OnDropFiles( HDROP hDropInfo )
 		std::wstring fileNameString( fileName );
 		droppedFiles.push_back( fileNameString );
 	}
-	auto propParam = PropertyDlg.GetEncodeParameter();
 
 	DroppedDlg.ProgBar.SetRange( 0, uiCount );
 
-	worker = new ConvertThread( this, WM_USER_THREAD, droppedFiles, propParam );
+	worker = new ConvertThread( this, WM_USER_THREAD, droppedFiles, pEncParam );
 	th = new std::thread( std::ref( *worker ) );
 
 	DroppedDlg.EnableControls( true );
@@ -310,7 +342,6 @@ CWebpDropConverterDlg::OnDropFiles( HDROP hDropInfo )
 	CDialogEx::OnDropFiles( hDropInfo );
 }
 
-
 void CWebpDropConverterDlg::OnMove( int x, int y )
 {
 	CDialogEx::OnMove( x, y );
@@ -318,16 +349,15 @@ void CWebpDropConverterDlg::OnMove( int x, int y )
 	if( ! IsWindowVisible() )  // 初期化の時は x, y がデタラメな数値で呼ばれる
 		return;
 
-	iniFile->WriteIniInt( "WindowRegion", "x", x );
-	iniFile->WriteIniInt( "WindowRegion", "y", y );
-	iniFile->WriteFlush();
+	appIni->SetIniInt( "WindowRegion", "x", x );
+	appIni->SetIniInt( "WindowRegion", "y", y );
+	appIni->WriteFlush();
 }
-
 
 void CWebpDropConverterDlg::OnClose()
 {
-	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
-	PropertyDlg.FlushParameter();
+	FmtWebpDlg.FlushParameter();
+	FmtOthrDlg.FlushParameter();
 
 	CDialogEx::OnClose();
 }

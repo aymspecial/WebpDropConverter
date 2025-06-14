@@ -3,7 +3,8 @@
 
 #include "pch.h"
 
-#include "DialogProperty.h"
+#include "PropertyParameter.h"
+#include "DialogFmtWebp.h"
 #include "ConvertThread.h"
 #include "WebpDropConverter.h"
 #include "DialogDropped.h"

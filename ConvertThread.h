@@ -23,21 +23,22 @@ class ConvertThread
 	CWnd* parentWindow;
 	UINT messageID;
 	bool endFlag;
-	PropertyParameter propParam {};
+	PropertyParameter* pEncParam;
 
 	std::queue<MyMessage> messageQueue;
 	std::mutex mtx;
 	std::condition_variable cv;
 	bool is_ready = false; // for spurious wakeup
-	char messString[ MAX_PATH ];
+	char messString[ MAX_PATH ] { 0 };
 
 	std::vector<std::wstring> droppedFiles;
 
 	void convertFile( const wchar_t* fileName );
+	void _convertFile( const wchar_t* fileName );
 	void uTF8ToShiftJis( LPSTR bufShiftJis, LPWSTR bufUTF8 );
 
 public:
-	ConvertThread( CWnd* _w, int _messageID, std::vector<std::wstring> _droppedFiles, PropertyParameter _encParam );
+	ConvertThread( CWnd* _w, int _messageID, std::vector<std::wstring> _droppedFiles, PropertyParameter* _pEncParam );
 	virtual ~ConvertThread();
 
 	void operator()();

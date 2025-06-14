@@ -1,15 +1,16 @@
 #include "pch.h"
 #include "webp_mod.h"
 
-#include "DialogProperty.h"
+#include "PropertyParameter.h"
+#include "DialogFmtWebp.h"
 #include "ConvertThread.h"
 
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
 
 // コンストラクタ
-ConvertThread::ConvertThread( CWnd* _w, int _messageID, std::vector<std::wstring> _droppedFiles, PropertyParameter _encParam ) :
-	messageID( _messageID ), parentWindow( _w ), endFlag( false ), propParam( _encParam )
+ConvertThread::ConvertThread( CWnd* _w, int _messageID, std::vector<std::wstring> _droppedFiles, PropertyParameter* _pEncParam ) :
+	messageID( _messageID ), parentWindow( _w ), endFlag( false ), pEncParam( _pEncParam )
 {
 	droppedFiles = _droppedFiles;
 }
@@ -22,6 +23,7 @@ ConvertThread::~ConvertThread()
 void
 ConvertThread::stringMessage( const wchar_t* mess )
 {
+
 	parentWindow->PostMessage( (UINT)MessageType::MM_STRING, ( WPARAM )nullptr, (LPARAM)mess );
 }
 
@@ -122,7 +124,7 @@ ConvertThread::operator()()
 	}
 
 	// スレッドループ終了時は -1 を送る
-	Sleep( 2000 );
+	Sleep( 1000 );
 	progressMessage( -1 );
 }
 
@@ -147,9 +149,8 @@ ConvertThread::uTF8ToShiftJis( LPSTR bufShiftJis, LPWSTR bufUTF8 )
 }
 
 #pragma warning( disable : 6011 6386 )
-
 void
-ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
+ConvertThread::_convertFile( const wchar_t* _sourceFileFullPath )
 {
 	char sourceFileFullPath[ MAX_PATH ];
 	uTF8ToShiftJis( sourceFileFullPath, (LPWSTR)_sourceFileFullPath );
@@ -158,7 +159,9 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 	char outputFileName[ MAX_PATH ];
 	strcpy_s( outputFileName, sourceFileFullPath );
 
-	if( strcmp( extention, ".png" ) == 0 || strcmp( extention, ".jpg" ) == 0 )
+	if( !strcmp( extention, ".jpg" ) ||
+		!strcmp( extention, ".tiff" ) || !strcmp( extention, ".tif" ) ||
+		!strcmp( extention, ".bmp" ) )
 	{
 		::PathRenameExtensionA( outputFileName, ".webp" );
 
@@ -168,7 +171,7 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 
 		vArgs.push_back( "-q" );	// 圧縮 quality
 		char sQuality[ 64 ] = { 0 };
-		_itoa_s( propParam.webpQuality, sQuality, 10 );
+		_itoa_s( pEncParam->Othr2WebpQuality, sQuality, 10 );
 		vArgs.push_back( sQuality );
 
 		vArgs.push_back( (LPSTR)sourceFileFullPath ); // 入力ファイル
@@ -185,7 +188,7 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 
 		cwebp_main( argc, argv );
 	}
-	else if( strcmp( extention, ".webp" ) == 0 )
+	else if( strcmp( extention, ".png" ) == 0 )
 	{
 		// 引数の作成
 		std::vector<std::string> vArgs;
@@ -193,22 +196,22 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 
 		vArgs.push_back( sourceFileFullPath ); // 入力ファイル
 
-		if( strcmp( propParam.format, "JPG" ) == 0 )
+		if( strcmp( pEncParam->Webp2Format, "JPG" ) == 0 )
 		{
 			vArgs.push_back( "-jpeg" );	// 出力フォーマット
 			::PathRenameExtensionA( outputFileName, ".jpg" );
 
 			vArgs.push_back( "-q" );	// 圧縮 quality
 			char sQuality[ 64 ] = { 0 };
-			_itoa_s( propParam.jpegQuality, sQuality, 10 );
+			_itoa_s( pEncParam->Webp2JpegQuality, sQuality, 10 );
 			vArgs.push_back( sQuality );
 		}
-		else if( strcmp( propParam.format, "TIF" ) == 0 )
+		else if( strcmp( pEncParam->Webp2Format, "TIF" ) == 0 )
 		{
 			vArgs.push_back( "-tiff" );	// 出力フォーマット
 			::PathRenameExtensionA( outputFileName, ".tiff" );
 		}
-		else if( strcmp( propParam.format, "BMP" ) == 0 )
+		else if( strcmp( pEncParam->Webp2Format, "BMP" ) == 0 )
 		{
 			vArgs.push_back( "-bmp" );	// 出力フォーマット
 			::PathRenameExtensionA( outputFileName, ".bmp" );
@@ -230,6 +233,156 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 		}
 
 		dwebp_main( argc, argv );
+	}
+	else
+	{
+		char message[ 64 ] = { 0 };
+		sprintf_s( message, 64, "Format(Extention) '%s' is not Supported.", extention );
+		MessageBoxA( NULL, message, "Error", MB_ICONERROR );
+	}
+
+}
+
+void
+ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
+{
+	char sourceFileFullPath[ MAX_PATH ];
+	uTF8ToShiftJis( sourceFileFullPath, (LPWSTR)_sourceFileFullPath );
+	const char* extention = PathFindExtensionA( sourceFileFullPath );
+
+	char outputFileName[ MAX_PATH ];
+	strcpy_s( outputFileName, sourceFileFullPath );
+
+
+
+	if( !strcmp( extention, ".png" ) || !strcmp( extention, ".jpg" ) || !strcmp( extention, ".bmp" ) )
+	{
+		if( !strcmp( pEncParam->Othr2Format, "WEBP" ) )
+		{
+			::PathRenameExtensionA( outputFileName, ".webp" );
+
+			// 引数の作成
+			std::vector<std::string> vArgs;
+			vArgs.push_back( "main" );  // 別になんでもよい
+
+			vArgs.push_back( "-q" );	// 圧縮 quality
+			char sQuality[ 64 ] = { 0 };
+			_itoa_s( pEncParam->Othr2WebpQuality, sQuality, 10 );
+			vArgs.push_back( sQuality );
+
+			vArgs.push_back( (LPSTR)sourceFileFullPath ); // 入力ファイル
+			vArgs.push_back( "-o" );
+			vArgs.push_back( (LPSTR)outputFileName );	// 出力ファイル
+
+			int argc = (int)vArgs.size();
+			auto argv = (char**)malloc( sizeof( char* ) * argc );
+
+			for( int i = 0; i < argc; i++ )
+			{
+				argv[ i ] = (char*)vArgs[ i ].c_str();
+			}
+			cwebp_main( argc, argv );
+
+			free( argv );
+		}
+		else
+		{
+			if( !strcmp( pEncParam->Othr2Format, "PNG" ) )
+			{
+				::PathRenameExtensionA( outputFileName, ".png" );
+			}
+			else if( !strcmp( pEncParam->Othr2Format, "JPG" ) )
+			{
+				::PathRenameExtensionA( outputFileName, ".jpg" );
+			}
+			else if( !strcmp( pEncParam->Othr2Format, "BMP" ) )
+			{
+				::PathRenameExtensionA( outputFileName, ".bmp" );
+			}
+
+			// 引数の作成
+			std::vector<std::string> vArgs;
+			vArgs.push_back( "main" );  // 別になんでもよい
+
+			vArgs.push_back( sourceFileFullPath ); // 入力ファイル
+
+			if( strcmp( pEncParam->Othr2Format, "JPG" ) == 0 )
+			{
+				vArgs.push_back( "-jpeg" );	// 出力フォーマット
+				::PathRenameExtensionA( outputFileName, ".jpg" );
+
+				vArgs.push_back( "-q" );	// 圧縮 quality
+				char sQuality[ 64 ] = { 0 };
+				_itoa_s( pEncParam->Webp2JpegQuality, sQuality, 10 );
+				vArgs.push_back( sQuality );
+			}
+			else if( strcmp( pEncParam->Othr2Format, "BMP" ) == 0 )
+			{
+				vArgs.push_back( "-bmp" );	// 出力フォーマット
+				::PathRenameExtensionA( outputFileName, ".bmp" );
+			}
+			else
+			{
+				vArgs.push_back( "-png" );	// 出力フォーマット
+				::PathRenameExtensionA( outputFileName, ".png" );
+			}
+
+			vArgs.push_back( "-o" );
+			vArgs.push_back( outputFileName );
+
+			int argc = (int)vArgs.size();
+			auto argv = (char**)malloc( sizeof( char* ) * argc );
+			for( int i = 0; i < argc; i++ )
+			{
+				argv[ i ] = (char*)vArgs[ i ].c_str();
+			}
+			cmodmod_main( argc, argv );
+
+			free( argv );
+		}
+	}
+	else if( strcmp( extention, ".webp" ) == 0 )
+	{
+		// 引数の作成
+		std::vector<std::string> vArgs;
+		vArgs.push_back( "main" );  // 別になんでもよい
+
+		vArgs.push_back( sourceFileFullPath ); // 入力ファイル
+
+		if( strcmp( pEncParam->Webp2Format, "JPG" ) == 0 )
+		{
+			vArgs.push_back( "-jpeg" );	// 出力フォーマット
+			::PathRenameExtensionA( outputFileName, ".jpg" );
+
+			vArgs.push_back( "-q" );	// 圧縮 quality
+			char sQuality[ 64 ] = { 0 };
+			_itoa_s( pEncParam->Webp2JpegQuality, sQuality, 10 );
+			vArgs.push_back( sQuality );
+		}
+		else if( strcmp( pEncParam->Webp2Format, "BMP" ) == 0 )
+		{
+			vArgs.push_back( "-bmp" );	// 出力フォーマット
+			::PathRenameExtensionA( outputFileName, ".bmp" );
+		}
+		else
+		{
+			::PathRenameExtensionA( outputFileName, ".png" );
+		}
+
+		vArgs.push_back( "-o" );
+		vArgs.push_back( (LPSTR)outputFileName );	// 出力ファイル
+
+		int argc = (int)vArgs.size();
+		auto argv = (char**)malloc( sizeof( char* ) * argc );
+
+		for( int i = 0; i < argc; i++ )
+		{
+			argv[ i ] = (char*)vArgs[ i ].c_str();
+		}
+
+		dwebp_main( argc, argv );
+
+		free( argv );
 	}
 	else
 	{

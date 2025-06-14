@@ -3,45 +3,35 @@
 #include "XmlIni.h"
 //#pragma warning ( disable : 26495 )
 
-struct PropertyParameter
-{
-	int webpQuality = 80;
-	char format[ 16 ] = "PNG";
-	int jpegQuality = 80;
-};
-
-struct DecodeParameter
+struct FmtOtherDecodeParameter
 {};
 
 // DialogProperty ダイアログ
-class DialogProperty : public CDialogEx
+class DialogFmtOther : public CDialogEx
 {
-	DECLARE_DYNAMIC( DialogProperty )
+	DECLARE_DYNAMIC( DialogFmtOther )
 
 public:
-	DialogProperty( CWnd* pParent = nullptr );   // 標準コンストラクター
-	virtual ~DialogProperty();
+	PropertyParameter* pEncParam = nullptr;
+	DialogFmtOther( CWnd* pParent = nullptr );   // 標準コンストラクター
+	virtual ~DialogFmtOther();
 
 	RECT OrigRect;
 
-	PropertyParameter GetEncodeParameter();
 	void FlushParameter();
 	void EnableControls( bool bWorking );
 
 	// ダイアログ データ
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_PROPERTY };
+	enum { IDD = IDD_FMTOTHER };
 #endif
 
 protected:
-	XmlIni *iniFile;
 	CSliderCtrl webpQualitySlider;
 	CSliderCtrl jpegQualitySlider;
 	CStatic labelWebpQualityValue;
 	CStatic labelJpegQualityValue;
-	CButton radioPNG, radioJPG, radioBMP, radioTIF;
-
-	PropertyParameter propParam { 0 }, oldPropParam { 0 };
+	CButton radioWbp, radioPNG, radioJPG, radioBMP;
 
 	virtual void DoDataExchange( CDataExchange* pDX );    // DDX/DDV サポート
 	virtual BOOL OnInitDialog();

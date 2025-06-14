@@ -21,14 +21,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -60,9 +60,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>$(TINYXML2)\Debug\tinyxml2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ZLIB)\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -106,12 +111,11 @@
   <ItemGroup>
     <ClInclude Include="ConvertThread.h" />
     <ClInclude Include="DialogDropped.h" />
-    <ClInclude Include="DialogProperty.h" />
+    <ClInclude Include="DialogFmtOther.h" />
+    <ClInclude Include="DialogFmtWebp.h" />
     <ClInclude Include="example_util.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="imageio\imageio_util.h" />
-    <ClInclude Include="imageio\image_dec.h" />
-    <ClInclude Include="imageio\image_enc.h" />
     <ClInclude Include="imageio\jpegdec.h" />
     <ClInclude Include="imageio\metadata.h" />
     <ClInclude Include="imageio\pngdec.h" />
@@ -119,7 +123,10 @@
     <ClInclude Include="imageio\tiffdec.h" />
     <ClInclude Include="imageio\webpdec.h" />
     <ClInclude Include="imageio\wicdec.h" />
+    <ClInclude Include="image_dec.h" />
+    <ClInclude Include="image_enc.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PropertyParameter.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stopwatch.h" />
     <ClInclude Include="targetver.h" />
@@ -129,10 +136,12 @@
     <ClInclude Include="webp_mod.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cmod_mod.cpp" />
     <ClCompile Include="ConvertThread.cpp" />
     <ClCompile Include="cwebp_mod.cpp" />
     <ClCompile Include="DialogDropped.cpp" />
-    <ClCompile Include="DialogProperty.cpp" />
+    <ClCompile Include="DialogFmtOther.cpp" />
+    <ClCompile Include="DialogFmtWebp.cpp" />
     <ClCompile Include="dwebp_mod.cpp" />
     <ClCompile Include="imageio_util.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -149,6 +158,7 @@
     </ClCompile>
     <ClCompile Include="pngdec.cpp" />
     <ClCompile Include="pnmdec.cpp" />
+    <ClCompile Include="PropertyParameter.cpp" />
     <ClCompile Include="tiffdec.cpp" />
     <ClCompile Include="webpdec.cpp" />
     <ClCompile Include="WebpDropConverter.cpp" />

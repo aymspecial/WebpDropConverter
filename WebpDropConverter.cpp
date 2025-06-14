@@ -5,8 +5,10 @@
 #include "pch.h"
 #include "framework.h"
 
+#include "PropertyParameter.h"
 
-#include "DialogProperty.h"
+#include "DialogFmtWebp.h"
+#include "DialogFmtOther.h"
 #include "ConvertThread.h"
 
 #include "DialogDropped.h"

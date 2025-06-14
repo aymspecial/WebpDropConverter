@@ -11,6 +11,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using namespace tinyxml2;
+
+// UTF8 ‚©‚ç SJIS ‚Ö•ÏŠ·
+void
+UTF8ToShiftJis( LPSTR bufShiftJis, LPCWSTR bufUTF8 )
+{
+	int ret = ::WideCharToMultiByte( CP_ACP, 0, bufUTF8, -1, bufShiftJis, MAX_PATH, NULL, NULL );
+}
+
 XmlIni::XmlIni( LPWSTR inifileName )
 {
 	// https://docs.microsoft.com/ja-jp/windows/win32/shell/shlwapi-path
@@ -38,14 +47,14 @@ XmlIni::XmlIni( LPWSTR inifileName )
 	makeFullFolder( lpDocumentPath ); // •Û‘¶ƒtƒHƒ‹ƒ_‚ª–³‚¯‚ê‚Îì‚é
 
 	char lpSjis[ MAX_PATH ];
-	uTF8ToShiftJis( lpSjis, lpInifileFullPath );
+	UTF8ToShiftJis( lpSjis, lpInifileFullPath );
 
-	doc = new TiXmlDocument( lpSjis );
-	bool loadOkay = doc->LoadFile();
+	doc = new tinyxml2::XMLDocument( lpSjis );
+	bool loadOkay = doc->LoadFile( lpSjis );
 	if( loadOkay == false )
 	{
-		auto decl = new TiXmlDeclaration( "1.0", "", "" );
-		doc->LinkEndChild( decl );
+		//auto decl = new XMLDeclaration( doc );
+		//doc->LinkEndChild( decl );
 	}
 }
 
@@ -77,16 +86,10 @@ XmlIni::makeFullFolder( LPWSTR path )
 	}
 }
 
-void
-XmlIni::uTF8ToShiftJis( LPSTR bufShiftJis, LPWSTR bufUTF8 )
-{
-	int ret = WideCharToMultiByte( CP_ACP, 0, bufUTF8, -1, bufShiftJis, MAX_PATH, NULL, NULL );
-}
-
 LPSTR
 XmlIni::GetIniString( LPSTR section, LPSTR key, LPSTR defaultValue )
 {
-	auto sectionElement = doc->FirstChild( section );
+	auto sectionElement = doc->FirstChildElement( section );
 
 	if( sectionElement == nullptr )
 		goto NoValue;
@@ -119,47 +122,52 @@ XmlIni::GetIniInt( LPSTR section, LPSTR key, int defaultValue )
 }
 
 void
+XmlIni::ClearDoc()
+{
+	doc->Clear();
+}
+
+void
 XmlIni::WriteFlush()
 {
 	char savepath[ MAX_PATH ];
-	uTF8ToShiftJis( savepath, lpInifileFullPath );
+	UTF8ToShiftJis( savepath, lpInifileFullPath );
 	doc->SaveFile( savepath );
 }
 
 void
-XmlIni::WriteIniString( LPSTR section, LPSTR key, LPSTR _value )
+XmlIni::SetIniString( LPSTR section, LPSTR key, LPSTR _value )
 {
-	auto sectionElement = doc->FirstChild( section );
+	auto sectionElement = doc->FirstChildElement( section );
 	if( sectionElement == nullptr )
 	{
-		sectionElement = new TiXmlElement( section );
+		sectionElement = doc->NewElement( section );
 		doc->LinkEndChild( sectionElement );
 	}
 
 	auto keyElement = sectionElement->FirstChildElement( key );
 	if( keyElement == nullptr )
 	{
-		keyElement = new TiXmlElement( key );
-		auto text = new TiXmlText( _value );
-		keyElement->InsertEndChild( *text );
-		sectionElement->InsertEndChild( *keyElement );
-		delete keyElement;
-		delete text;
+		keyElement = doc->NewElement( key );
+		sectionElement->InsertEndChild( keyElement );
 	}
-	else
-	{
-		keyElement->Clear();
-		auto text = new TiXmlText( _value );
-		keyElement->InsertEndChild( *text );
-		delete text;
-	}
+
+	keyElement->SetText( _value );
 }
 
 void
-XmlIni::WriteIniInt( LPSTR section, LPSTR key, int _value )
+XmlIni::SetIniString( LPSTR section, LPSTR key, LPCWSTR _value )
+{
+	CHAR cValue[ MAX_PATH ];
+	UTF8ToShiftJis( cValue, _value );
+	this->SetIniString( section, key, cValue );
+}
+
+void
+XmlIni::SetIniInt( LPSTR section, LPSTR key, int _value )
 {
 	char sValue[ 64 ];
 	_itoa_s( _value, sValue, 10 );
 
-	WriteIniString( section, key, sValue );
+	this->SetIniString( section, key, sValue );
 }

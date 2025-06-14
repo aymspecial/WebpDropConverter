@@ -9,7 +9,9 @@
 
 // プリコンパイルするヘッダーをここに追加します
 #include "framework.h"
-#include "vector"
-#include "string"
+#include <assert.h>
+#include <wchar.h>
+#include <string.h>
+#include <vector>
 #include "resource.h"
 #endif //PCH_H

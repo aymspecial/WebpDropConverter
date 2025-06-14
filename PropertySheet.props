@@ -2,17 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <TINYXML2>D:\Workspace\tinyxml-2.6.2</TINYXML2>
-    <WEBP>D:\Workspace\libwebp-1.2.1</WEBP>
-    <JPEGLIB>D:\Workspace\jpeg-9d</JPEGLIB>
-    <PNGLIB>D:\Workspace\libpng-1.6.37</PNGLIB>
-    <ZLIB>D:\Workspace\zlib-1.2.11</ZLIB>
+    <TINYXML2>D:\Workspace\tinyxml2-10.0.0</TINYXML2>
+    <WEBP>D:\Workspace\libwebp-1.5.0</WEBP>
+    <JPEGLIB>D:\Workspace\jpeg-9f</JPEGLIB>
+    <PNGLIB>D:\Workspace\libpng-1.6.48</PNGLIB>
+    <ZLIB>D:\Workspace\zlib-1.3.1</ZLIB>
+    <STB_IMAGE>D:\Workspace\stb</STB_IMAGE>
   </PropertyGroup>
   <PropertyGroup>
     <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <LibraryPath>$(ZLIB)\Release;$(PNGLIB)\Release;$(JPEGLIB)\Release\x64;$(WEBP)\Release;$(TINYXML2)\x64\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ZLIB)\build\Release;$(PNGLIB)\build\Release;$(JPEGLIB)\Release\x64;$(WEBP)\build\Release;$(TINYXML2)\x64\Release;$(LibraryPath)</LibraryPath>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
-    <IncludePath>$(WEBP)\include;$(JPEGLIB);$(WEBP)\src;$(TINYXML2);$(PNGLIB);$(IncludePath)</IncludePath>
+    <IncludePath>$(WEBP)\include;$(JPEGLIB);$(WEBP)\src;$(TINYXML2);$(PNGLIB);$(STB_IMAGE);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup>
@@ -33,6 +34,9 @@
     <BuildMacro Include="ZLIB">
       <Value>$(ZLIB)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="STB_IMAGE">
+      <Value>$(STB_IMAGE)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

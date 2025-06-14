@@ -3,12 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef HAVE_CONFIG_H
+
 #include "webp/config.h"
-#endif
+
 
 int cwebp_main( int argc, char* argv[] );
 int dwebp_main( int argc, char* argv[] );
+int cmodmod_main( int argc, char* argv[] );
+
+int xImgIoUtilReadFile( const char* const file_name,
+						const uint8_t** data, size_t* data_size );
 
 #define WEBP_HAVE_JPEG
 
@@ -24,9 +28,10 @@ int dwebp_main( int argc, char* argv[] );
 
 #pragma comment( lib, "webputils.lib" )
 #pragma comment( lib, "webpdecode.lib" )
-#pragma comment( lib, "exampleutil.lib" )
-//#pragma comment( lib, "imagedec.lib" )
-#pragma comment( lib, "imageenc.lib" )
-#pragma comment( lib, "webp.lib" )
-#pragma comment( lib, "imageioutil.lib" )
-#pragma comment( lib, "webpdemux.lib" )
+#pragma comment( lib, "libexampleutil.lib" )
+//#pragma comment( lib, "libimagedec.lib" )
+#//pragma comment( lib, "libimageenc.lib" )
+#pragma comment( lib, "libwebp.lib" )
+//#pragma comment( lib, "libimageioutil.lib" )
+#pragma comment( lib, "libwebpdemux.lib" )
+#pragma comment( lib, "libsharpyuv.lib" )

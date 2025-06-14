@@ -14,7 +14,6 @@
 #include "pch.h"
 #include "webp_mod.h"
 
-
 static int verbose = 0;
 static int quiet = 0;
 #ifndef WEBP_DLL
@@ -27,9 +26,11 @@ extern "C" {
 #endif
 #endif  // WEBP_DLL
 
+#ifndef HAVE_WINCODEC_H
 #define HAVE_WINCODEC_H
+#endif
 
-static int SaveOutput( const WebPDecBuffer* const buffer,
+int SaveOutput( const WebPDecBuffer* const buffer,
 					   WebPOutputFileFormat format, const char* const out_file, int jpgQuality = 80 )
 {
 	const int use_stdout = ( out_file != NULL ) && !WSTRCMP( out_file, "-" );
@@ -402,7 +403,8 @@ int dwebp_main( int argc, char* argv[] )
 		FREE_WARGV_AND_RETURN( -1 );
 	}
 
-	if( quiet ) verbose = 0;
+	if( quiet )
+		verbose = 0;
 
 	{
 		VP8StatusCode status = VP8_STATUS_OK;
