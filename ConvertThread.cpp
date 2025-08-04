@@ -152,7 +152,6 @@ ConvertThread::uTF8ToShiftJis( LPSTR bufShiftJis, LPWSTR bufUTF8 )
 void MoveToRecycleBin( const wchar_t* filePath )
 {
 	// ファイルパスの長さを取得
-
 	
 	size_t len = wcsnlen_s( filePath, MAX_PATH );
 	LPWSTR p = (LPWSTR)malloc( ( len + 2 ) * sizeof( WCHAR ) );
@@ -160,6 +159,7 @@ void MoveToRecycleBin( const wchar_t* filePath )
 	p[ len + 1 ] = 0;
 
 	SHFILEOPSTRUCT fileOp = { 0 };
+
 	fileOp.wFunc = FO_DELETE; // 削除操作
 	fileOp.pFrom = p;  // ファイルパス
 	fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT;                     // プログレス非表示;
