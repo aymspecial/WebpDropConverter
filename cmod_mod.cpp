@@ -70,7 +70,7 @@ enum class OutFormat
 
 int cmodmod_main( int argc, char* argv[] )
 {
-	int return_value = -1;
+	int return_value = false;
 	const char* in_file = NULL, * out_file = NULL;
 	int short_output = 0;
 	int quiet = 0;

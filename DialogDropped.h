@@ -13,6 +13,7 @@ public:
 
 	RECT OrigRect;
 	ConvertThread* ConvertWorker;
+	PropertyParameter* pEncParam = nullptr;
 
 	void EnableControls( bool bWorking );
 
@@ -28,8 +29,14 @@ protected:
 public:
 	CProgressCtrl ProgBar;
 	CMFCButton ButtonProgressStop;
+	CButton TrashSourceBtn;
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDropFiles( HDROP hDropInfo );
 	afx_msg void OnBnClickedStopConvert();
 	CStatic ThreadLabel;
+	afx_msg void OnBnClickedTrashsource();
+private:
+	BOOL bTrashSource = false;
+public:
+
 };
