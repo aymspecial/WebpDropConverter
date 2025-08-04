@@ -34,7 +34,6 @@ class ConvertThread
 	std::vector<std::wstring> droppedFiles;
 
 	void convertFile( const wchar_t* fileName );
-	void _convertFile( const wchar_t* fileName );
 	void uTF8ToShiftJis( LPSTR bufShiftJis, LPWSTR bufUTF8 );
 
 public:

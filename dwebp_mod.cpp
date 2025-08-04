@@ -521,6 +521,7 @@ int dwebp_main( int argc, char* argv[] )
 					 "use -o flag to save the result as e.g. PNG.\n" );
 		}
 	}
+
 Exit:
 	WebPFreeDecBuffer( output_buffer );
 	WebPFree( (void*)external_buffer );

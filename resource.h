@@ -41,6 +41,8 @@
 #define IDC_RB_OTHR2TIFF                1023
 #define IDC_OTHR_JPGQ                   1024
 #define IDC_OTHR_JPGQL                  1024
+#define IDC_TRASHSOURCE                 1025
+#define IDC_CHECK1                      1028
 
 // Next default values for new objects
 // 
@@ -48,7 +50,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1025
+#define _APS_NEXT_CONTROL_VALUE         1029
 #define _APS_NEXT_SYMED_VALUE           107
 #endif
 #endif

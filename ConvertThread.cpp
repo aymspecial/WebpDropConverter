@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "webp_mod.h"
 
 #include "PropertyParameter.h"
@@ -8,18 +8,18 @@
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
 
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 ConvertThread::ConvertThread( CWnd* _w, int _messageID, std::vector<std::wstring> _droppedFiles, PropertyParameter* _pEncParam ) :
 	messageID( _messageID ), parentWindow( _w ), endFlag( false ), pEncParam( _pEncParam )
 {
 	droppedFiles = _droppedFiles;
 }
 
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 ConvertThread::~ConvertThread()
 {}
 
-// ƒfƒoƒbƒO—p‚ÌƒƒbƒZ[ƒW‚ğ CWnd* ‚É‘—‚é 
+// ãƒ‡ãƒãƒƒã‚°ç”¨ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ CWnd* ã«é€ã‚‹ 
 void
 ConvertThread::stringMessage( const wchar_t* mess )
 {
@@ -47,14 +47,14 @@ ConvertThread::PushMessage( enum MessageType _type, void* _data )
 void
 ConvertThread::PushMessage( MyMessage msg )
 {
-	// ƒƒbƒZ[ƒWƒLƒ…[‚ÉƒƒbƒZ[ƒW‚ğŠi”[
+	// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚­ãƒ¥ãƒ¼ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ ¼ç´
 	{
 		std::lock_guard<std::mutex> lock( mtx );
 		messageQueue.push( msg );
 		is_ready = true;
 	}
 
-	// ƒXƒŒƒbƒhƒŒƒWƒ…[ƒ€‚Ì’Ê’m
+	// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ¬ã‚¸ãƒ¥ãƒ¼ãƒ ã®é€šçŸ¥
 	cv.notify_one();
 	//	cv.notify_all();
 }
@@ -64,25 +64,25 @@ ConvertThread::GetMessage( MyMessage* msg )
 {
 	size_t nMessage;
 	{
-		// ƒƒbƒZ[ƒW‚ª‰½ŒÂ‚ ‚é‚©Šm”F‚µ
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒä½•å€‹ã‚ã‚‹ã‹ç¢ºèªã—
 		std::lock_guard<std::mutex> lock( mtx );
 		nMessage = messageQueue.size();
 	}
 
 	if( 0 < nMessage )
 	{
-		// ƒƒbƒZ[ƒW‚ª‚ ‚ê‚Îæ“ª‚ğæ‚èo‚µ‚Äæ“ª‚ğíœ‚·‚é
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒã‚ã‚Œã°å…ˆé ­ã‚’å–ã‚Šå‡ºã—ã¦å…ˆé ­ã‚’å‰Šé™¤ã™ã‚‹
 		std::lock_guard<std::mutex> lock( mtx );
 		auto currentMessage = messageQueue.front();
 		*msg = currentMessage;
 		messageQueue.pop();
 	}
 
-	// Ÿ‚É cv.wait ‚Å~‚ß‚é
+	// æ¬¡ã« cv.wait ã§æ­¢ã‚ã‚‹
 	is_ready = false;
 }
 
-// ƒƒCƒ“ƒ‹[ƒv
+// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 void
 ConvertThread::operator()()
 {
@@ -92,7 +92,7 @@ ConvertThread::operator()()
 	MyMessage msg;
 	std::wstring wstr;
 
-	// ƒƒCƒ“ƒ‹[ƒv
+	// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 	for( int i = 0; endFlag != true && i < droppedFiles.size(); i++ )
 	{
 		this->GetMessage( &msg );
@@ -113,7 +113,7 @@ ConvertThread::operator()()
 				break;
 		}
 
-		// ƒeƒLƒXƒgƒƒbƒZ[ƒW‚Ìì¬
+		// ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ä½œæˆ
 		wchar_t progText[ MAX_PATH ];
 		swprintf_s( progText, MAX_PATH, L"%d/%d  \n%s", (int)i, (int)droppedFiles.size(),
 					droppedFiles[ i ].c_str() + fileNamePos( droppedFiles[ i ].c_str() ) );
@@ -123,7 +123,7 @@ ConvertThread::operator()()
 		progressMessage( i );
 	}
 
-	// ƒXƒŒƒbƒhƒ‹[ƒvI—¹‚Í -1 ‚ğ‘—‚é
+	// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ«ãƒ¼ãƒ—çµ‚äº†æ™‚ã¯ -1 ã‚’é€ã‚‹
 	Sleep( 1000 );
 	progressMessage( -1 );
 }
@@ -148,101 +148,35 @@ ConvertThread::uTF8ToShiftJis( LPSTR bufShiftJis, LPWSTR bufUTF8 )
 	int ret = WideCharToMultiByte( CP_ACP, 0, bufUTF8, -1, bufShiftJis, MAX_PATH, NULL, NULL );
 }
 
-#pragma warning( disable : 6011 6386 )
-void
-ConvertThread::_convertFile( const wchar_t* _sourceFileFullPath )
+
+void MoveToRecycleBin( const wchar_t* filePath )
 {
-	char sourceFileFullPath[ MAX_PATH ];
-	uTF8ToShiftJis( sourceFileFullPath, (LPWSTR)_sourceFileFullPath );
-	const char* extention = PathFindExtensionA( sourceFileFullPath );
+	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®é•·ã•ã‚’å–å¾—
 
-	char outputFileName[ MAX_PATH ];
-	strcpy_s( outputFileName, sourceFileFullPath );
+	
+	size_t len = wcsnlen_s( filePath, MAX_PATH );
+	LPWSTR p = (LPWSTR)malloc( ( len + 2 ) * sizeof( WCHAR ) );
+	wcscpy_s( p, len + 2, filePath );
+	p[ len + 1 ] = 0;
 
-	if( !strcmp( extention, ".jpg" ) ||
-		!strcmp( extention, ".tiff" ) || !strcmp( extention, ".tif" ) ||
-		!strcmp( extention, ".bmp" ) )
+	SHFILEOPSTRUCT fileOp = { 0 };
+	fileOp.wFunc = FO_DELETE; // å‰Šé™¤æ“ä½œ
+	fileOp.pFrom = p;  // ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT;                     // ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹éè¡¨ç¤º;
+
+	auto rc = SHFileOperation( &fileOp ); // å®Ÿè¡Œ
+	// æˆåŠŸã—ãŸã‹ï¼Ÿ
+	if( !rc )
 	{
-		::PathRenameExtensionA( outputFileName, ".webp" );
-
-		// ˆø”‚Ìì¬
-		std::vector<std::string> vArgs;
-		vArgs.push_back( "main" );  // •Ê‚É‚È‚ñ‚Å‚à‚æ‚¢
-
-		vArgs.push_back( "-q" );	// ˆ³k quality
-		char sQuality[ 64 ] = { 0 };
-		_itoa_s( pEncParam->Othr2WebpQuality, sQuality, 10 );
-		vArgs.push_back( sQuality );
-
-		vArgs.push_back( (LPSTR)sourceFileFullPath ); // “ü—Íƒtƒ@ƒCƒ‹
-		vArgs.push_back( "-o" );
-		vArgs.push_back( (LPSTR)outputFileName );	// o—Íƒtƒ@ƒCƒ‹
-
-		int argc = (int)vArgs.size();
-		auto argv = (char**)malloc( sizeof( char* ) * argc );
-
-		for( int i = 0; i < argc; i++ )
-		{
-			argv[ i ] = (char*)vArgs[ i ].c_str();
-		}
-
-		cwebp_main( argc, argv );
-	}
-	else if( strcmp( extention, ".png" ) == 0 )
-	{
-		// ˆø”‚Ìì¬
-		std::vector<std::string> vArgs;
-		vArgs.push_back( "main" );  // •Ê‚É‚È‚ñ‚Å‚à‚æ‚¢
-
-		vArgs.push_back( sourceFileFullPath ); // “ü—Íƒtƒ@ƒCƒ‹
-
-		if( strcmp( pEncParam->Webp2Format, "JPG" ) == 0 )
-		{
-			vArgs.push_back( "-jpeg" );	// o—ÍƒtƒH[ƒ}ƒbƒg
-			::PathRenameExtensionA( outputFileName, ".jpg" );
-
-			vArgs.push_back( "-q" );	// ˆ³k quality
-			char sQuality[ 64 ] = { 0 };
-			_itoa_s( pEncParam->Webp2JpegQuality, sQuality, 10 );
-			vArgs.push_back( sQuality );
-		}
-		else if( strcmp( pEncParam->Webp2Format, "TIF" ) == 0 )
-		{
-			vArgs.push_back( "-tiff" );	// o—ÍƒtƒH[ƒ}ƒbƒg
-			::PathRenameExtensionA( outputFileName, ".tiff" );
-		}
-		else if( strcmp( pEncParam->Webp2Format, "BMP" ) == 0 )
-		{
-			vArgs.push_back( "-bmp" );	// o—ÍƒtƒH[ƒ}ƒbƒg
-			::PathRenameExtensionA( outputFileName, ".bmp" );
-		}
-		else
-		{
-			::PathRenameExtensionA( outputFileName, ".png" );
-		}
-
-		vArgs.push_back( "-o" );
-		vArgs.push_back( (LPSTR)outputFileName );	// o—Íƒtƒ@ƒCƒ‹
-
-		int argc = (int)vArgs.size();
-		auto argv = (char**)malloc( sizeof( char* ) * argc );
-
-		for( int i = 0; i < argc; i++ )
-		{
-			argv[ i ] = (char*)vArgs[ i ].c_str();
-		}
-
-		dwebp_main( argc, argv );
+		;
 	}
 	else
 	{
-		char message[ 64 ] = { 0 };
-		sprintf_s( message, 64, "Format(Extention) '%s' is not Supported.", extention );
-		MessageBoxA( NULL, message, "Error", MB_ICONERROR );
+		TRACE( "rc:%d\n", rc );
 	}
-
 }
 
+#pragma warning( disable : 6011 6386 )
 void
 ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 {
@@ -253,7 +187,7 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 	char outputFileName[ MAX_PATH ];
 	strcpy_s( outputFileName, sourceFileFullPath );
 
-
+	int return_value = 1;
 
 	if( !strcmp( extention, ".png" ) || !strcmp( extention, ".jpg" ) || !strcmp( extention, ".bmp" ) )
 	{
@@ -261,18 +195,18 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 		{
 			::PathRenameExtensionA( outputFileName, ".webp" );
 
-			// ˆø”‚Ìì¬
+			// å¼•æ•°ã®ä½œæˆ
 			std::vector<std::string> vArgs;
-			vArgs.push_back( "main" );  // •Ê‚É‚È‚ñ‚Å‚à‚æ‚¢
+			vArgs.push_back( "main" );  // åˆ¥ã«ãªã‚“ã§ã‚‚ã‚ˆã„
 
-			vArgs.push_back( "-q" );	// ˆ³k quality
+			vArgs.push_back( "-q" );	// åœ§ç¸® quality
 			char sQuality[ 64 ] = { 0 };
 			_itoa_s( pEncParam->Othr2WebpQuality, sQuality, 10 );
 			vArgs.push_back( sQuality );
 
-			vArgs.push_back( (LPSTR)sourceFileFullPath ); // “ü—Íƒtƒ@ƒCƒ‹
+			vArgs.push_back( (LPSTR)sourceFileFullPath ); // å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 			vArgs.push_back( "-o" );
-			vArgs.push_back( (LPSTR)outputFileName );	// o—Íƒtƒ@ƒCƒ‹
+			vArgs.push_back( (LPSTR)outputFileName );	// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
 			int argc = (int)vArgs.size();
 			auto argv = (char**)malloc( sizeof( char* ) * argc );
@@ -300,30 +234,30 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 				::PathRenameExtensionA( outputFileName, ".bmp" );
 			}
 
-			// ˆø”‚Ìì¬
+			// å¼•æ•°ã®ä½œæˆ
 			std::vector<std::string> vArgs;
-			vArgs.push_back( "main" );  // •Ê‚É‚È‚ñ‚Å‚à‚æ‚¢
+			vArgs.push_back( "main" );  // åˆ¥ã«ãªã‚“ã§ã‚‚ã‚ˆã„
 
-			vArgs.push_back( sourceFileFullPath ); // “ü—Íƒtƒ@ƒCƒ‹
+			vArgs.push_back( sourceFileFullPath ); // å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
 			if( strcmp( pEncParam->Othr2Format, "JPG" ) == 0 )
 			{
-				vArgs.push_back( "-jpeg" );	// o—ÍƒtƒH[ƒ}ƒbƒg
+				vArgs.push_back( "-jpeg" );	// å‡ºåŠ›ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 				::PathRenameExtensionA( outputFileName, ".jpg" );
 
-				vArgs.push_back( "-q" );	// ˆ³k quality
+				vArgs.push_back( "-q" );	// åœ§ç¸® quality
 				char sQuality[ 64 ] = { 0 };
 				_itoa_s( pEncParam->Webp2JpegQuality, sQuality, 10 );
 				vArgs.push_back( sQuality );
 			}
 			else if( strcmp( pEncParam->Othr2Format, "BMP" ) == 0 )
 			{
-				vArgs.push_back( "-bmp" );	// o—ÍƒtƒH[ƒ}ƒbƒg
+				vArgs.push_back( "-bmp" );	// å‡ºåŠ›ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 				::PathRenameExtensionA( outputFileName, ".bmp" );
 			}
 			else
 			{
-				vArgs.push_back( "-png" );	// o—ÍƒtƒH[ƒ}ƒbƒg
+				vArgs.push_back( "-png" );	// å‡ºåŠ›ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 				::PathRenameExtensionA( outputFileName, ".png" );
 			}
 
@@ -336,32 +270,32 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 			{
 				argv[ i ] = (char*)vArgs[ i ].c_str();
 			}
-			cmodmod_main( argc, argv );
+			auto ret = cmodmod_main( argc, argv );
 
 			free( argv );
 		}
 	}
 	else if( strcmp( extention, ".webp" ) == 0 )
 	{
-		// ˆø”‚Ìì¬
+		// å¼•æ•°ã®ä½œæˆ
 		std::vector<std::string> vArgs;
-		vArgs.push_back( "main" );  // •Ê‚É‚È‚ñ‚Å‚à‚æ‚¢
+		vArgs.push_back( "main" );  // åˆ¥ã«ãªã‚“ã§ã‚‚ã‚ˆã„
 
-		vArgs.push_back( sourceFileFullPath ); // “ü—Íƒtƒ@ƒCƒ‹
+		vArgs.push_back( sourceFileFullPath ); // å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
 		if( strcmp( pEncParam->Webp2Format, "JPG" ) == 0 )
 		{
-			vArgs.push_back( "-jpeg" );	// o—ÍƒtƒH[ƒ}ƒbƒg
+			vArgs.push_back( "-jpeg" );	// å‡ºåŠ›ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 			::PathRenameExtensionA( outputFileName, ".jpg" );
 
-			vArgs.push_back( "-q" );	// ˆ³k quality
+			vArgs.push_back( "-q" );	// åœ§ç¸® quality
 			char sQuality[ 64 ] = { 0 };
 			_itoa_s( pEncParam->Webp2JpegQuality, sQuality, 10 );
 			vArgs.push_back( sQuality );
 		}
 		else if( strcmp( pEncParam->Webp2Format, "BMP" ) == 0 )
 		{
-			vArgs.push_back( "-bmp" );	// o—ÍƒtƒH[ƒ}ƒbƒg
+			vArgs.push_back( "-bmp" );	// å‡ºåŠ›ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 			::PathRenameExtensionA( outputFileName, ".bmp" );
 		}
 		else
@@ -370,7 +304,7 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 		}
 
 		vArgs.push_back( "-o" );
-		vArgs.push_back( (LPSTR)outputFileName );	// o—Íƒtƒ@ƒCƒ‹
+		vArgs.push_back( (LPSTR)outputFileName );	// å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 
 		int argc = (int)vArgs.size();
 		auto argv = (char**)malloc( sizeof( char* ) * argc );
@@ -380,7 +314,7 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 			argv[ i ] = (char*)vArgs[ i ].c_str();
 		}
 
-		dwebp_main( argc, argv );
+		return_value = dwebp_main( argc, argv );
 
 		free( argv );
 	}
@@ -390,4 +324,12 @@ ConvertThread::convertFile( const wchar_t* _sourceFileFullPath )
 		sprintf_s( message, 64, "Format(Extention) '%s' is not Supported.", extention );
 		MessageBoxA( NULL, message, "Error", MB_ICONERROR );
 	}
+
+	if( return_value == 0 )
+	{
+		// å…ƒã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚´ãƒŸç®±ã«å…¥ã‚Œã‚‹
+		MoveToRecycleBin( _sourceFileFullPath );
+	}
+
+
 }

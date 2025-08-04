@@ -65,6 +65,7 @@ CWebpDropConverterDlg::CWebpDropConverterDlg( CWnd* pParent )
 	pEncParam = new PropertyParameter();
 	FmtWebpDlg.pEncParam = pEncParam;
 	FmtOthrDlg.pEncParam = pEncParam;
+	DroppedDlg.pEncParam = pEncParam;
 }
 
 CWebpDropConverterDlg::~CWebpDropConverterDlg()
@@ -156,13 +157,13 @@ CWebpDropConverterDlg::OnInitDialog()
 
 	// タブ 0 をカレントにし、ダイアログ １ を表示する
 	tab.SetCurSel( 0 );
+	DroppedDlg.ShowWindow( SW_SHOW );
 	FmtWebpDlg.ShowWindow( SW_HIDE );
 	FmtOthrDlg.ShowWindow( SW_HIDE );
-	DroppedDlg.ShowWindow( SW_SHOW );
 
 	RECT dlgRect = DroppedDlg.OrigRect;
 	auto width = dlgRect.right - dlgRect.left + 10;
-	auto height = dlgRect.bottom - dlgRect.top + 20;
+	auto height = dlgRect.bottom - dlgRect.top + 60;
 
 	auto x = appIni->GetIniInt( "WindowRegion", "x", 100 );
 	auto y = appIni->GetIniInt( "WindowRegion", "y", 100 );
@@ -236,9 +237,9 @@ void CWebpDropConverterDlg::OnTcnSelchangeTab1( NMHDR* pNMHDR, LRESULT* pResult 
 			RECT dlgRect;
 			dlgRect = DroppedDlg.OrigRect;
 			auto width = dlgRect.right - dlgRect.left + 10;
-			auto height = dlgRect.bottom - dlgRect.top + 20;
+			auto height = dlgRect.bottom - dlgRect.top + 60;
 			this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
-			DragAcceptFiles( 1 );
+			DragAcceptFiles( TRUE );
 			break;
 		}
 		case 1:

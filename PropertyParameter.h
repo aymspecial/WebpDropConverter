@@ -10,6 +10,8 @@ struct PropertyParameter
 	int Webp2JpegQuality = 80;
 	int Othr2JpegQuality = 80;
 
+	bool bTrashSource = false;
+
 	XmlIni* ini = nullptr;
 
 	PropertyParameter();
