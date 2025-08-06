@@ -9,7 +9,6 @@ struct PropertyParameter
 	char Othr2Format[ 16 ] = "PNG";
 	int Webp2JpegQuality = 80;
 	int Othr2JpegQuality = 80;
-
 	bool bTrashSource = false;
 
 	XmlIni* ini = nullptr;

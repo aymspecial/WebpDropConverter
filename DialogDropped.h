@@ -2,6 +2,8 @@
 
 
 // DialogDropped ダイアログ
+class WebpDropConverterDlg;
+class ConvertThread;
 
 class DialogDropped : public CDialogEx
 {
@@ -31,12 +33,11 @@ public:
 	CMFCButton ButtonProgressStop;
 	CButton TrashSourceBtn;
 	virtual BOOL OnInitDialog();
-	afx_msg void OnDropFiles( HDROP hDropInfo );
 	afx_msg void OnBnClickedStopConvert();
 	CStatic ThreadLabel;
 	afx_msg void OnBnClickedTrashsource();
 private:
 	BOOL bTrashSource = false;
 public:
-
+	afx_msg void OnDropFiles( HDROP hDropInfo );
 };

@@ -5,9 +5,11 @@
 
 #include "PropertyParameter.h"
 #include "DialogFmtWebp.h"
+#include "DialogFmtOther.h"
+#include "DialogDropped.h"
 #include "ConvertThread.h"
 #include "WebpDropConverter.h"
-#include "DialogDropped.h"
+#include "WebpDropConverterDlg.h"
 #include "afxdialogex.h"
 
 
@@ -37,6 +39,7 @@ BEGIN_MESSAGE_MAP( DialogDropped, CDialogEx )
 	ON_WM_DROPFILES()
 	ON_BN_CLICKED( IDC_CONVERTSTOP, &DialogDropped::OnBnClickedStopConvert )
 	ON_BN_CLICKED( IDC_TRASHSOURCE, &DialogDropped::OnBnClickedTrashsource )
+	ON_WM_DROPFILES()
 END_MESSAGE_MAP()
 
 // DialogDropped メッセージ ハンドラー
@@ -45,18 +48,15 @@ DialogDropped::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	DragAcceptFiles();
+	DragAcceptFiles( TRUE );
 	ProgBar.EnableWindow( FALSE );
 	ButtonProgressStop.EnableWindow( FALSE );
 	TrashSourceBtn.EnableWindow( TRUE );
 
-	return TRUE;
-}
+	bTrashSource = pEncParam->bTrashSource;
+	UpdateData( FALSE );
 
-void DialogDropped::OnDropFiles( HDROP hDropInfo )
-{
-	// TODO: ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
-	CDialogEx::OnDropFiles( hDropInfo );
+	return TRUE;
 }
 
 void DialogDropped::OnBnClickedStopConvert()
@@ -87,6 +87,20 @@ DialogDropped::EnableControls( bool bWorking )
 }
 void DialogDropped::OnBnClickedTrashsource()
 {
-	// TODO: ここにコントロール通知ハンドラー コードを追加します。
+	// 元ファイルをゴミ箱へ　チェックボックスが押された
+	UpdateData( TRUE );
 	pEncParam->bTrashSource = bTrashSource;
+	pEncParam->WriteIniFile();
+}
+
+void DialogDropped::OnDropFiles( HDROP hDropInfo )
+{
+	// ここにメッセージ ハンドラー コードを追加するか、既定の処理を呼び出します。
+	CWnd* pMainWnd = AfxGetMainWnd();
+	if( pMainWnd && ::IsWindow( pMainWnd->GetSafeHwnd() ) )
+	{
+		::SendMessage( pMainWnd->GetSafeHwnd(), WM_DROPFILES, (WPARAM)hDropInfo, 0 );
+	}
+
+	CDialogEx::OnDropFiles( hDropInfo );
 }

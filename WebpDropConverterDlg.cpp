@@ -120,7 +120,7 @@ CWebpDropConverterDlg::OnInitDialog()
 
 	// このダイアログのアイコンを設定します。アプリケーションのメイン ウィンドウがダイアログでない場合、
 	//  Framework は、この設定を自動的に行います。
-	DragAcceptFiles();
+	DragAcceptFiles( TRUE );
 
 	SetIcon( m_hIcon, TRUE );		// 大きいアイコンの設定
 	SetIcon( m_hIcon, FALSE );		// 小さいアイコンの設定
@@ -134,6 +134,7 @@ CWebpDropConverterDlg::OnInitDialog()
 	FmtWebpDlg.Create( IDD_FMTWEBP, &tab );
 	FmtOthrDlg.Create( IDD_FMTOTHER, &tab );
 	DroppedDlg.Create( IDD_PROP_Dropped, &tab );
+	
 
 	FmtWebpDlg.GetWindowRect( &FmtWebpDlg.OrigRect );
 	FmtOthrDlg.GetWindowRect( &FmtOthrDlg.OrigRect );
@@ -253,7 +254,7 @@ void CWebpDropConverterDlg::OnTcnSelchangeTab1( NMHDR* pNMHDR, LRESULT* pResult 
 			auto width = dlgRect.right - dlgRect.left + 10;
 			auto height = dlgRect.bottom - dlgRect.top + 70;
 			this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
-			DragAcceptFiles( FALSE );  // プロパティシートは Drag を受け付けないので苦肉の策
+			DragAcceptFiles( TRUE );  // プロパティシートは Drag を受け付けないので苦肉の策
 			// Drop のダイアログは不要かも（泣
 			break;
 		}
@@ -268,9 +269,10 @@ void CWebpDropConverterDlg::OnTcnSelchangeTab1( NMHDR* pNMHDR, LRESULT* pResult 
 			auto width = dlgRect.right - dlgRect.left + 10;
 			auto height = dlgRect.bottom - dlgRect.top + 70;
 			this->SetWindowPos( NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER );
-			DragAcceptFiles( FALSE );
+			DragAcceptFiles( TRUE );
 			break;
 		}
+
 		default:
 			;
 	}

@@ -45,6 +45,7 @@ public:
 	DialogDropped DroppedDlg;
 	DialogFmtWebp  FmtWebpDlg;
 	DialogFmtOther FmtOthrDlg;
+
 	afx_msg void OnMove( int x, int y );
 	afx_msg void OnClose();
 };
